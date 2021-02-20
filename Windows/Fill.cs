@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -47,6 +48,8 @@ namespace _2d_graphic.Windows
 
         private void picturebox_MouseClick(object sender, MouseEventArgs e)
         {
+            
+            //MessageBox.Show("asdasd");
             if(e.Button == MouseButtons.Right)
             {
                 Cursor.Hide();
@@ -63,13 +66,17 @@ namespace _2d_graphic.Windows
             }
         }
 
-        private void StartFilling(int x, int y)
+        private async Task<int> StartFilling(int x, int y)
         {
             Brush brush = Brushes.White;
             Stack<int[]> pixs = new Stack<int[]>();
             pixs.Push(new[] { x, y });
             while (pixs.Count > 0)
             {
+                picturebox.Image = bitmap;
+                await Task.Delay(1);
+                
+                
                 var n = pixs.Pop();
                 if (n[1] >= height)
                 {
@@ -83,18 +90,20 @@ namespace _2d_graphic.Windows
                 if (Color.White.ToArgb() != pi.ToArgb())
                 {
                     graphics.FillRectangle(brush, n[0], n[1], 1, 1);
-                    picturebox.Image = bitmap;
                     pixs.Push(new[] { n[0], n[1] - 1 });
                     pixs.Push(new[] { n[0], n[1] + 1 });
-                    pixs.Push(new[] { n[0] - 1, n[1] });
                     pixs.Push(new[] { n[0] + 1, n[1] });
+                    pixs.Push(new[] { n[0] - 1, n[1] });
                 }
             }
+            return 1;
         }
+
+        
 
         private void picturebox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (FigurePoints.Count > 0)
+            if (FigurePoints.Count > 0 && !IsFilling)
             {
                 Point lastPoint = FigurePoints.ToArray()[FigurePoints.Count - 1];
                 if (!IsFilling)
@@ -107,10 +116,9 @@ namespace _2d_graphic.Windows
                 {
                     graphics.DrawLine(pen, (int)lastPoint.X, (int)lastPoint.Y, Cursor.Position.X - 2, Cursor.Position.Y - 2);
                 }
-                graphics.DrawEllipse(new Pen(Color.Black), Cursor.Position.X - 2, Cursor.Position.Y - 2, 5, 5);
+                //graphics.DrawEllipse(new Pen(Color.Black), Cursor.Position.X - 2, Cursor.Position.Y - 2, 5, 5);
             }
         }
-
         private void DrawFigure()
         {
             if (FigurePoints.Count > 1)

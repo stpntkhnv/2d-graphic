@@ -105,20 +105,12 @@ namespace _2d_graphic.Windows
 
         private void DrawTree(double x, double y, double a, double angle, int count)
         {
-
+            Random rnd = new Random();
+            pen = new Pen(Color.FromArgb(rnd.Next(255), rnd.Next(255), rnd.Next(255), rnd.Next(255)));
             if (a > 2)
             {
                 a *= 0.7;
-                if (count == 3)
-                {
-                    pen.Color = Color.White;
-                    count = 0;
-                }
-                else
-                {
-                    count++;
-                    pen.Color = Color.White;
-                }
+                
                 double xnew = Math.Round(x + a * Math.Cos(angle)),
                 ynew = Math.Round(y - a * Math.Sin(angle));
 
@@ -127,6 +119,9 @@ namespace _2d_graphic.Windows
 
                 x = xnew;
                 y = ynew;
+
+                
+
 
                 DrawTree(x, y, a, angle + angle45, count);
                 DrawTree(x, y, a, angle - angle30, count);
