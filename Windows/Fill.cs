@@ -90,13 +90,31 @@ namespace _2d_graphic.Windows
                 if (Color.White.ToArgb() != pi.ToArgb())
                 {
                     graphics.FillRectangle(brush, n[0], n[1], 1, 1);
-                    pixs.Push(new[] { n[0], n[1] - 1 });
-                    pixs.Push(new[] { n[0], n[1] + 1 });
+                    if (IsTrue(n[0] + 1, n[1]))
                     pixs.Push(new[] { n[0] + 1, n[1] });
-                    pixs.Push(new[] { n[0] - 1, n[1] });
+
+                    if (IsTrue(n[0], n[1] - 1))
+                        pixs.Push(new[] { n[0], n[1] - 1 });
+
+                    if (IsTrue(n[0]  - 1, n[1]))
+                        pixs.Push(new[] { n[0] - 1, n[1] });
+
+                    if (IsTrue(n[0], n[1] + 1))
+                        pixs.Push(new[] { n[0], n[1] + 1 });
                 }
             }
             return 1;
+        }
+
+        public bool IsTrue(int x, int y)
+        {
+            var color = ((Bitmap)picturebox.Image).GetPixel(x, y);
+            if (Color.White.ToArgb() != color.ToArgb())
+            {
+                return true;
+            }
+
+            return false;
         }
 
         

@@ -87,7 +87,7 @@ namespace _2d_graphic.Windows
 
         private void button1_Click(object sender, EventArgs e)
         {
-            DrawTree(width / 2, height, 200, angle90, 0);
+            DrawTree(pen, width / 2, height, 200, angle90, 0);
             pictureBox1.Image = bitMap;
         }
 
@@ -103,18 +103,17 @@ namespace _2d_graphic.Windows
             pictureBox1.Image = bitMap;
         }
 
-        private void DrawTree(double x, double y, double a, double angle, int count)
+        private void DrawTree(Pen pencil, double x, double y, double a, double angle, int count)
         {
             Random rnd = new Random();
-            pen = new Pen(Color.FromArgb(rnd.Next(255), rnd.Next(255), rnd.Next(255), rnd.Next(255)));
-            if (a > 2)
-            {
-                a *= 0.7;
+            pencil.Color = Color.FromArgb(rnd.Next(255), rnd.Next(255), rnd.Next(255), rnd.Next(255));
+            for(int i = 0; i < a; i++)
+            { 
                 
-                double xnew = Math.Round(x + a * Math.Cos(angle)),
-                ynew = Math.Round(y - a * Math.Sin(angle));
+                double xnew = Math.Round(x + 100 * Math.Cos(angle)),
+                ynew = Math.Round(y - 100 * Math.Sin(angle));
 
-                graphics.DrawLine(pen, (float)x, (float)y, (float)xnew, (float)ynew);
+                graphics.DrawLine(pencil, (float)x, (float)y, (float)xnew, (float)ynew);
 
 
                 x = xnew;
@@ -123,8 +122,8 @@ namespace _2d_graphic.Windows
                 
 
 
-                DrawTree(x, y, a, angle + angle45, count);
-                DrawTree(x, y, a, angle - angle30, count);
+                DrawTree(pencil, x, y, 100, angle + angle45, count);
+                DrawTree(pencil, x, y, 100, angle - angle30, count);
             }
         }
     }
